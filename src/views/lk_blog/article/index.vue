@@ -107,7 +107,8 @@ export default {
         isShow: [
           { required: true, message: '是否展示不能为空', trigger: 'blur' }
         ]
-      }    }
+      }
+    }
   },
   methods: {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
