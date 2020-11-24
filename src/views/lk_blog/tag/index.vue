@@ -22,7 +22,7 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="tagId" label="ID" />
+        <el-table-column prop="id" label="ID" />
         <el-table-column prop="content" label="内容" />
         <el-table-column prop="color" label="color" />
         <el-table-column prop="createTime" label="创建日期">
@@ -35,7 +35,7 @@
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-permission="['admin','tag:edit','tag:del']" label="操作" width="150px" align="center">
+        <el-table-column v-permission="['admin','Tag:edit','Tag:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -51,27 +51,27 @@
 </template>
 
 <script>
-import crudTag from '@/api/tag'
+import crudTag from '@/api/Tag'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { tagId: null, content: null, color: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, content: null, color: null, createTime: null, updateTime: null }
 export default {
   name: 'Tag',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: 'lkblog_文章', url: 'api/tag', idField: 'tagId', sort: 'tagId,desc', crudMethod: { ...crudTag }})
+    return CRUD({ title: '标签', url: 'api/Tag', idField: 'id', sort: 'id,desc', crudMethod: { ...crudTag }})
   },
   data() {
     return {
       permission: {
-        add: ['admin', 'tag:add'],
-        edit: ['admin', 'tag:edit'],
-        del: ['admin', 'tag:del']
+        add: ['admin', 'Tag:add'],
+        edit: ['admin', 'Tag:edit'],
+        del: ['admin', 'Tag:del']
       },
       rules: {
         content: [
