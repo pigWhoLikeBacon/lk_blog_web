@@ -31,7 +31,7 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="articleId" label="ID" />
+        <el-table-column prop="id" label="ID" />
         <el-table-column prop="cover" label="文章封面" />
         <el-table-column prop="introduce" label="简介" />
         <el-table-column prop="title" label="题目" />
@@ -75,14 +75,14 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { articleId: null, cover: null, introduce: null, title: null, content: null, views: null, isShow: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, cover: null, introduce: null, title: null, content: null, views: null, isShow: null, createTime: null, updateTime: null }
 export default {
   name: 'Article',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   dicts: ['article_show'],
   cruds() {
-    return CRUD({ title: '文章', url: 'api/article', idField: 'articleId', sort: 'articleId,desc', crudMethod: { ...crudArticle }})
+    return CRUD({ title: '文章', url: 'api/article', idField: 'id', sort: 'id,desc', crudMethod: { ...crudArticle }})
   },
   data() {
     return {
