@@ -125,10 +125,10 @@ export default {
       // window.alert(request({
       //   url: 'api/article',
       //   method: 'post',
-      //   data: { 'articleId': null, 'cover': '1234ghhnjfdghjkfdgyhjkdftytyuj', 'introduce': '1234', 'title': '1234', 'content': '1234', 'views': null, 'isShow': 'true', 'createTime': null, 'updateTime': null }
+      //   data: { 'id': null, 'cover': '1234ghhnjfdghjkfdgyhjkdftytyuj', 'introduce': '1234', 'title': '1234', 'content': '1234', 'views': null, 'isShow': 'true', 'createTime': null, 'updateTime': null }
       // }))
       window.alert(request({
-        url: 'api/Article',
+        url: 'api/article',
         method: 'post',
         data: this.article
       }))
