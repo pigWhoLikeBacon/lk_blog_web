@@ -22,7 +22,7 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="tagId" label="ID" />
+        <el-table-column prop="id" label="ID" />
         <el-table-column prop="content" label="内容" />
         <el-table-column prop="color" label="color" />
         <el-table-column prop="createTime" label="创建日期">
@@ -58,13 +58,13 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { tagId: null, content: null, color: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, content: null, color: null, createTime: null, updateTime: null }
 export default {
   name: 'Tag',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: '标签', url: 'api/tag', idField: 'tagId', sort: 'tagId,desc', crudMethod: { ...crudTag }})
+    return CRUD({ title: '标签', url: 'api/tag', idField: 'id', sort: 'id,desc', crudMethod: { ...crudTag }})
   },
   data() {
     return {
