@@ -66,7 +66,8 @@
     "vuex": "3.1.0",
     "wangeditor": "^3.1.1",
     "xlsx": "^0.14.1",
-    "vue-image-crop-upload": "^2.5.0"
+    "vue-image-crop-upload": "^2.5.0",
+    "@yaireo/tagify": "3.22.0"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",

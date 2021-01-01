@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="10">
       <el-col :span="24" :sm="18">
-        <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" />
+        <mavon-editor ref="md" :style="'height:' + tagheight" @imgAdd="imgAdd" />
       </el-col>
       <el-col :span="24" :sm="6">
         <el-card class="box-card">
@@ -11,47 +11,48 @@
             <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
           </div>
           <div class="text item">
-            <el-form ref="form" :model="form" label-width="80px">
-              <el-form-item label="活动名称">
-                <el-input v-model="form.name" />
-              </el-form-item>
-              <el-form-item label="活动区域">
-                <el-select v-model="form.region" placeholder="请选择活动区域">
-                  <el-option label="区域一" value="shanghai" />
-                  <el-option label="区域二" value="beijing" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="活动时间">
-                <el-col :span="11">
-                  <el-date-picker v-model="form.date1" type="date" placeholder="选择日期" style="width: 100%;" />
-                </el-col>
-                <el-col class="line" :span="2">-</el-col>
-                <el-col :span="11">
-                  <el-time-picker v-model="form.date2" placeholder="选择时间" style="width: 100%;" />
-                </el-col>
-              </el-form-item>
-              <el-form-item label="即时配送">
-                <el-switch v-model="form.delivery" />
-              </el-form-item>
-              <el-form-item label="活动性质">
-                <el-checkbox-group v-model="form.type">
-                  <el-checkbox label="美食/餐厅线上活动" name="type" />
-                  <el-checkbox label="地推活动" name="type" />
-                  <el-checkbox label="线下主题活动" name="type" />
-                  <el-checkbox label="单纯品牌曝光" name="type" />
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="特殊资源">
-                <el-radio-group v-model="form.resource">
-                  <el-radio label="线上品牌商赞助" />
-                  <el-radio label="线下场地免费" />
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="活动形式">
-                <el-input v-model="form.desc" type="textarea" />
+            <el-form ref="form" :label-position="'top'" :model="form" label-width="80px">
+              <el-form-item>
+                <el-input v-model="article.id" placeholder="">
+                  <template slot="prepend">ID</template>
+                </el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                <el-input v-model="article.title" placeholder="">
+                  <template slot="prepend">标题</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="cover">
+                <el-image
+                  style="width: 100px; height: 100px"
+                  :src="article.cover"
+                  :preview-src-list="[article.cover]"
+                  :fit="'cover'"
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-card class="box-card">
+                  <div slot="header" class="clearfix">
+                    <span>标签</span>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="open()">修改</el-button>
+                  </div>
+                  <el-tag
+                    v-for="tag in article.tags"
+                    :key="tag.name"
+                    :type="tag.type">
+                    {{tag.name}}
+                  </el-tag>
+                </el-card>
+              </el-form-item>
+              <el-form-item label="简介">
+                <el-input v-model="article.introduce" type="textarea" />
+              </el-form-item>
+              <el-form-item>
+                <label class="el-form-item__label" style="padding: 0;">是否展示&nbsp;</label>
+                <el-switch v-model="article.isShow" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="post()">立即创建</el-button>
                 <el-button>取消</el-button>
               </el-form-item>
             </el-form>
@@ -59,7 +60,6 @@
         </el-card>
       </el-col>
     </el-row>
-    <input type="button" value="Post" @click="post()">
   </div>
 </template>
 
@@ -85,15 +85,19 @@ export default {
       },
       article: {
         id: 5,
-        cover: '/hhd',
+        cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         introduce: 'abstract',
         title: 'title5',
         content: 'content123',
         views: 10,
-        isShow: 'true',
+        isShow: true,
         createTime: 1602332420000,
         updateTime: 1606221679000,
-        tags: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        tags: [
+          { id: 1, name: 'hhd1', type: 'success' },
+          { id: 2, name: 'hhd1', type: '' },
+          { id: 3, name: 'hhd1', type: '' }
+        ]
       }
     }
   },
@@ -117,6 +121,22 @@ export default {
         this.$refs.md.$img2Url(pos, url)
       })
     },
+    open() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     post: function() {
       // window.alert(request({
       //   url: 'api/article',
@@ -127,10 +147,14 @@ export default {
       //   method: 'post',
       //   data: { 'id': null, 'cover': '1234ghhnjfdghjkfdgyhjkdftytyuj', 'introduce': '1234', 'title': '1234', 'content': '1234', 'views': null, 'isShow': 'true', 'createTime': null, 'updateTime': null }
       // }))
+      // window.alert(request({
+      //   url: 'api/article',
+      //   method: 'post',
+      //   data: this.article
+      // }))
       window.alert(request({
-        url: 'api/article',
-        method: 'post',
-        data: this.article
+        url: 'api/article?blurry=3',
+        method: 'get'
       }))
     }
   }
@@ -138,10 +162,6 @@ export default {
 </script>
 
 <style scoped>
-.el-col {
-  border-radius: 4px;
-}
-
 .text {
   font-size: 14px;
 }
@@ -156,7 +176,7 @@ export default {
   content: "";
 }
 .clearfix:after {
-  clear: both
+  clear: both;
 }
 
 .box-card {

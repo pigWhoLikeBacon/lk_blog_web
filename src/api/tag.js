@@ -1,5 +1,18 @@
 import request from '@/utils/request'
 
+export function getAllTag() {
+  const params = {
+    page: 0,
+    size: 9999,
+    enabled: true
+  }
+  return request({
+    url: 'api/tag',
+    method: 'get',
+    params
+  })
+}
+
 export function add(data) {
   return request({
     url: 'api/tag',
