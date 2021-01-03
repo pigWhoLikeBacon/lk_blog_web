@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="10">
       <el-col :span="24" :sm="18">
-        <mavon-editor ref="md" :style="'height:' + tagheight" @imgAdd="imgAdd" />
+        <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" />
       </el-col>
       <el-col :span="24" :sm="6">
         <el-card class="box-card">
@@ -31,18 +31,7 @@
                 />
               </el-form-item>
               <el-form-item>
-                <el-card class="box-card">
-                  <div slot="header" class="clearfix">
-                    <span>标签</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="open()">修改</el-button>
-                  </div>
-                  <el-tag
-                    v-for="tag in article.tags"
-                    :key="tag.name"
-                    :type="tag.type">
-                    {{tag.name}}
-                  </el-tag>
-                </el-card>
+                <TagSelector :selected-tags="article.tags" :all-tags="allTags" />
               </el-form-item>
               <el-form-item label="简介">
                 <el-input v-model="article.introduce" type="textarea" />
@@ -67,9 +56,12 @@
 import { upload } from '@/utils/upload'
 import { mapGetters } from 'vuex'
 import request from '@/utils/request'
+import TagSelector from './module/tag/tagSelector.vue'
+import { getAllTag } from '@/api/tag'
 // import article from "@/api/Article";
 export default {
   name: 'Markdown',
+  components: { TagSelector },
   data() {
     return {
       height: document.documentElement.clientHeight - 200 + 'px',
@@ -83,6 +75,7 @@ export default {
         resource: '',
         desc: ''
       },
+      allTags: [],
       article: {
         id: 5,
         cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
@@ -94,9 +87,8 @@ export default {
         createTime: 1602332420000,
         updateTime: 1606221679000,
         tags: [
-          { id: 1, name: 'hhd1', type: 'success' },
-          { id: 2, name: 'hhd1', type: '' },
-          { id: 3, name: 'hhd1', type: '' }
+          { id: 1, content: 'tag1', color: 'success' },
+          { id: 2, content: 'tag2', color: '' }
         ]
       }
     }
@@ -112,6 +104,9 @@ export default {
     window.onresize = function temp() {
       that.height = document.documentElement.clientHeight - 200 + 'px'
     }
+    getAllTag().then(res => {
+      this.allTags = res.content
+    }).catch(() => { })
   },
   methods: {
     imgAdd(pos, $file) {
@@ -119,22 +114,6 @@ export default {
         const data = res.data
         const url = this.baseApi + '/file/' + data.type + '/' + data.realName
         this.$refs.md.$img2Url(pos, url)
-      })
-    },
-    open() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
     },
     post: function() {
