@@ -58,9 +58,9 @@ import { mapGetters } from 'vuex'
 import request from '@/utils/request'
 import TagSelector from './module/tag/tagSelector.vue'
 import { getAllTag } from '@/api/tag'
-// import article from "@/api/Article";
+import { getArticle } from '@/api/article'
 export default {
-  name: 'Markdown',
+  name: 'Write',
   components: { TagSelector },
   data() {
     return {
@@ -101,11 +101,21 @@ export default {
   },
   mounted() {
     const that = this
+    const query = this.$route.query
+    console.log(query.id)
     window.onresize = function temp() {
       that.height = document.documentElement.clientHeight - 200 + 'px'
     }
     getAllTag().then(res => {
       this.allTags = res.content
+    }).catch(() => { })
+    const params = {
+      page: 0,
+      size: 1,
+      id: query.id
+    }
+    getArticle(params).then(res => {
+      // this.article = res.content
     }).catch(() => { })
   },
   methods: {

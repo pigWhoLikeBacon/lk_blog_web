@@ -5,7 +5,14 @@
         <span>标签</span>
         <el-button style="float: right; padding: 3px 0" type="text" @click="dialogVisible = true">修改</el-button>
       </div>
-      <Tags :tags="selectedTags" />
+      <el-tag
+        v-for="tag in selectedTags"
+        :key="tag.id"
+        :type="tag.color"
+        class="tag"
+      >
+        {{ tag.content }}
+      </el-tag>
     </el-card>
     <el-dialog
       title="提示"
@@ -13,14 +20,31 @@
       width="30%"
     >
       <el-card class="box-card">
-        <Tags :tags="unselectedTags" />
+        <el-tag
+          v-for="tag in unselectedTags"
+          :key="tag.id"
+          :type="tag.color"
+          class="stag tag"
+          @click="select(tag)"
+        >
+          {{ tag.content }}
+        </el-tag>
       </el-card>
       <el-card class="box-card">
-        <Tags :tags="selectedTags" />
+        <el-tag
+          v-for="tag in selectedTags"
+          :key="tag.id"
+          :type="tag.color"
+          class="stag tag"
+          @click="unselect(tag)"
+        >
+          {{ tag.content }}
+        </el-tag>
       </el-card>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="reset()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -28,19 +52,21 @@
 
 <script>
 // import { getAllTag } from '@/api/tag'
-import Tags from './tags.vue'
 
 export default {
   name: 'TagSelector',
-  components: { Tags },
   props: {
     selectedTags: {
       type: Array,
-      default: null
+      default: function() {
+        return []
+      }
     },
     allTags: {
       type: Array,
-      default: null
+      default: function() {
+        return []
+      }
     }
   },
   data() {
@@ -66,10 +92,32 @@ export default {
       }
       return unselectedTags
     }
+  },
+  methods: {
+    select: function(tag) {
+      this.selectedTags.push(tag)
+    },
+    unselect: function(tag) {
+      for (var tagId in this.selectedTags) {
+        if (tag.id === this.selectedTags[tagId].id) {
+          this.selectedTags.splice(tagId, 1)
+          break
+        }
+      }
+    },
+    reset: function() {
+    }
   }
 }
 </script>
 
 <style scoped>
+.stag {
+  cursor: pointer;
+}
+
+.tag {
+  margin-right: 12px;
+}
 
 </style>

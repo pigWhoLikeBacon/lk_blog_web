@@ -20,11 +20,16 @@
             <el-input v-model="form.content" :rows="3" type="textarea" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="是否展示" prop="isShow">
-            <el-radio v-model="form.isShow" v-for="item in dict.article_show" :key="item.id" :label="item.value">{{ item.label }}</el-radio>
+            <el-radio v-for="item in dict.article_show" :key="item.id" v-model="form.isShow" :label="item.value">{{ item.label }}</el-radio>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="text" @click="crud.cancelCU">取消</el-button>
+          <el-button type="info" @click="crud.cancelCU">取消</el-button>
+          <el-button type="success">
+            <router-link :to="{path:'/lk_blog/write', query:{'id':form.id}}">
+              更多修改
+            </router-link>
+          </el-button>
           <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
         </div>
       </el-dialog>
@@ -107,12 +112,15 @@ export default {
         isShow: [
           { required: true, message: '是否展示不能为空', trigger: 'blur' }
         ]
-      }    }
+      }}
   },
   methods: {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
+    },
+    hhd(hhd) {
+      console.log(hhd)
     }
   }
 }

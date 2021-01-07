@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getArticle(params) {
+  return request({
+    url: 'api/article',
+    method: 'get',
+    params
+  })
+}
+
 export function add(data) {
   return request({
     url: 'api/article',
