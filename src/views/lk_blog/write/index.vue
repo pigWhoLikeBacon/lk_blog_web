@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="10">
       <el-col :span="24" :sm="18">
-        <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" />
+        <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" v-model="article.content"/>
       </el-col>
       <el-col :span="24" :sm="6">
         <el-card class="box-card">
@@ -41,7 +41,7 @@
                 <el-switch v-model="article.isShow" />
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="post()">立即创建</el-button>
+                <el-button type="primary" @click="post()">提交</el-button>
                 <el-button>取消</el-button>
               </el-form-item>
             </el-form>
@@ -55,10 +55,9 @@
 <script>
 import { upload } from '@/utils/upload'
 import { mapGetters } from 'vuex'
-import request from '@/utils/request'
 import TagSelector from './module/tag/tagSelector.vue'
 import { getAllTag } from '@/api/tag'
-import { getArticle } from '@/api/article'
+import { add, edit, getArticle } from '@/api/article'
 export default {
   name: 'Write',
   components: { TagSelector },
@@ -77,19 +76,14 @@ export default {
       },
       allTags: [],
       article: {
-        id: 5,
+        id: '',
         cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        introduce: 'abstract',
-        title: 'title5',
-        content: 'content123',
-        views: 10,
+        introduce: '',
+        title: '',
+        content: '',
+        views: 0,
         isShow: true,
-        createTime: 1602332420000,
-        updateTime: 1606221679000,
-        tags: [
-          { id: 1, content: 'tag1', color: 'success' },
-          { id: 2, content: 'tag2', color: '' }
-        ]
+        tags: []
       }
     }
   },
@@ -102,21 +96,22 @@ export default {
   mounted() {
     const that = this
     const query = this.$route.query
-    console.log(query.id)
     window.onresize = function temp() {
       that.height = document.documentElement.clientHeight - 200 + 'px'
     }
     getAllTag().then(res => {
       this.allTags = res.content
     }).catch(() => { })
-    const params = {
-      page: 0,
-      size: 1,
-      id: query.id
+    if (typeof (query.id) !== 'undefined') {
+      const params = {
+        page: 0,
+        size: 1,
+        id: query.id
+      }
+      getArticle(params).then(res => {
+        this.article = res.content[0]
+      }).catch(() => { })
     }
-    getArticle(params).then(res => {
-      // this.article = res.content
-    }).catch(() => { })
   },
   methods: {
     imgAdd(pos, $file) {
@@ -127,24 +122,11 @@ export default {
       })
     },
     post: function() {
-      // window.alert(request({
-      //   url: 'api/article',
-      //   method: 'get'
-      // }))
-      // window.alert(request({
-      //   url: 'api/article',
-      //   method: 'post',
-      //   data: { 'id': null, 'cover': '1234ghhnjfdghjkfdgyhjkdftytyuj', 'introduce': '1234', 'title': '1234', 'content': '1234', 'views': null, 'isShow': 'true', 'createTime': null, 'updateTime': null }
-      // }))
-      // window.alert(request({
-      //   url: 'api/article',
-      //   method: 'post',
-      //   data: this.article
-      // }))
-      window.alert(request({
-        url: 'api/article?blurry=3',
-        method: 'get'
-      }))
+      if (this.article.id === '') {
+        add(this.article)
+      } else {
+        edit(this.article)
+      }
     }
   }
 }
