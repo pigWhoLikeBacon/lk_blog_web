@@ -22,7 +22,11 @@
                   <template slot="prepend">标题</template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="cover">
+              <el-form-item>
+                <TagSelector :selected-tags="article.tags" :all-tags="allTags" />
+              </el-form-item>
+              <el-form-item label="封面">
+                <el-input style="margin-bottom: 9px" v-model="article.cover" type="textarea" autosize placeholder="图片url"/>
                 <el-image
                   style="width: 100px; height: 100px"
                   :src="article.cover"
@@ -30,11 +34,8 @@
                   :fit="'cover'"
                 />
               </el-form-item>
-              <el-form-item>
-                <TagSelector :selected-tags="article.tags" :all-tags="allTags" />
-              </el-form-item>
               <el-form-item label="简介">
-                <el-input v-model="article.introduce" type="textarea" />
+                <el-input v-model="article.introduce" type="textarea" autosize />
               </el-form-item>
               <el-form-item>
                 <label class="el-form-item__label" style="padding: 0;">是否展示&nbsp;</label>
@@ -64,20 +65,10 @@ export default {
   data() {
     return {
       height: document.documentElement.clientHeight - 200 + 'px',
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       allTags: [],
       article: {
         id: '',
-        cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        cover: '',
         introduce: '',
         title: '',
         content: '',
