@@ -15,10 +15,11 @@
       </el-tag>
     </el-card>
     <el-dialog
-      title="提示"
+      title="选择标签"
       :visible.sync="dialogVisible"
       width="30%"
     >
+      <p>未选择</p>
       <el-card class="box-card">
         <el-tag
           v-for="tag in unselectedTags"
@@ -30,6 +31,7 @@
           {{ tag.content }}
         </el-tag>
       </el-card>
+      <p>已选择</p>
       <el-card class="box-card">
         <el-tag
           v-for="tag in selectedTags"
@@ -44,7 +46,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-        <el-button type="primary" @click="reset()">确 定</el-button>
+<!--        <el-button type="primary" @click="reset()">重 置</el-button>-->
       </span>
     </el-dialog>
   </div>

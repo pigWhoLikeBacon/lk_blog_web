@@ -2,16 +2,15 @@
   <div class="app-container">
     <el-row :gutter="10">
       <el-col :span="24" :sm="18">
-        <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" v-model="article.content"/>
+        <mavon-editor ref="md" v-model="article.content" :style="'height:' + height" @imgAdd="imgAdd" />
       </el-col>
       <el-col :span="24" :sm="6">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>卡片名称</span>
-            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+            <span>文章属性</span>
           </div>
           <div class="text item">
-            <el-form ref="form" :label-position="'top'" :model="form" label-width="80px">
+            <el-form ref="form" :label-position="'top'" label-width="80px">
               <el-form-item>
                 <el-input v-model="article.id" placeholder="">
                   <template slot="prepend">ID</template>
@@ -26,7 +25,7 @@
                 <TagSelector :selected-tags="article.tags" :all-tags="allTags" />
               </el-form-item>
               <el-form-item label="封面">
-                <el-input style="margin-bottom: 9px" v-model="article.cover" type="textarea" autosize placeholder="图片url"/>
+                <el-input v-model="article.cover" style="margin-bottom: 9px" type="textarea" autosize placeholder="图片url" />
                 <el-image
                   style="width: 100px; height: 100px"
                   :src="article.cover"
@@ -59,6 +58,7 @@ import { mapGetters } from 'vuex'
 import TagSelector from './module/tag/tagSelector.vue'
 import { getAllTag } from '@/api/tag'
 import { add, edit, getArticle } from '@/api/article'
+import { Notification } from 'element-ui'
 export default {
   name: 'Write',
   components: { TagSelector },
@@ -114,10 +114,22 @@ export default {
     },
     post: function() {
       if (this.article.id === '') {
-        add(this.article)
+        add(this.article).then(res => {
+          this.suc(res.id)
+        })
+          .catch(() => {})
       } else {
-        edit(this.article)
+        edit(this.article).then(res => {
+          this.suc(res.id)
+        })
+          .catch(() => {})
       }
+    },
+    suc(id) {
+      Notification.success({
+        title: '操作成功，文章id：' + id,
+        duration: 5000
+      })
     }
   }
 }
